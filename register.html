@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>Expense - Sign-up</title>
   </head>
   <body>
 
@@ -67,7 +67,8 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert('Data submitted successfully: ' + JSON.stringify(result));
+                    console.log('Data submitted successfully: ' + JSON.stringify(result));
+                    window.location.href = "http://127.0.0.1:5500/login.html";
                 } else {
                     alert('Error submitting data: ' + response.statusText);
                 }
