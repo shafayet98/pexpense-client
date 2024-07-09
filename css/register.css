@@ -1,0 +1,46 @@
+body{
+    font-family: "League Spartan", sans-serif;
+}
+.introRegisterMsg{
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+.title p{
+    margin: 0px;
+    padding: 0px;
+    font-size: 120px;
+    font-weight: bolder;
+    color: rgb(255,49,48);
+    font-size-adjust: 0.5;
+}
+.title .end{
+    margin-top: -80px;
+}
+
+#registerForm .form-control:focus{
+    border-color: #000;
+    box-shadow: none !important;
+}
+#registerForm input{
+    width: 75% !important;
+    border: 2px solid black;
+}
+#registerForm label{
+    font-family: "League Spartan", sans-serif;
+    font-size: 32px;
+}
+
+.description{
+    margin-top: -40px;
+    font-family: "League Spartan", sans-serif;
+}
+
+.btn-outline-dark{
+    border: 2px solid #000 !important;
+    width: 75% !important;
+}
+
+
+/* .btn-outline-dark:focus{
+    border: 1px solid #000 !important;
+} */
