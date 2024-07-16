@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,26 +27,39 @@
         <button id="logout" type="submit" class="mt-3 btn btn-outline-dark">Logout</button>
     </nav>
 
-    
+
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <h2>Welcome <b class="accountHolder"> </b></h2>
-
-                <div class="categories"></div>
+                <h2>DEMO PURPOSE: Welcome <b class="accountHolder"> </b></h2>
+                <!-- form to add a net category -->
+                <form id="form_add_category">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="add_category" aria-describedby="addnewCategory"
+                            placeholder="Enter a new Category">
+                    </div>
+                    <button id="add_category" type="submit" class="btn btn-outline-dark">Add Category</button>
+                </form>
+                <!-- all the created categories -->
+                <div class="categories mt-5"></div>
+                <button id="save_cat" type="submit" class="mt-3 btn btn-outline-dark">Save</button>
+                <p class="showerr mt-1">Please select single category to proceed</p>
             </div>
             <div class="col-sm-6"></div>
         </div>
     </div>
-    
 
-    
+
+
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <script>
+
+
+
         let userid = window.sessionStorage.getItem("userid");
         let accessToken = window.sessionStorage.getItem("accessToken");
         document.querySelector(".accountHolder").innerHTML = userid;
@@ -73,6 +86,7 @@
                     result.forEach(element => {
                         let listItem = document.createElement("li");
                         let catName = document.createTextNode(element.category_name);
+                        listItem.setAttribute("id", element.category_name);
                         listItem.appendChild(catName);
                         document.querySelector(".categories").appendChild(listItem);
                     });
@@ -87,9 +101,44 @@
             }
         })
 
-        document.getElementById("logout").addEventListener("click", function(){
+        document.getElementById("logout").addEventListener("click", function () {
             window.location.href = "http://127.0.0.1:5500/login.html";
             sessionStorage.clear();
+        })
+
+        // 
+        document.querySelector(".categories").addEventListener('click', function(e){
+            if(e.target.tagName === "LI"){
+                e.target.setAttribute("class", "selected");
+                e.target.style.background = "#f5e370";
+                console.log(e.target.innerHTML);
+            }
+            document.querySelector(".showerr").style.display = "none";
+        })
+        
+        document.getElementById("save_cat").addEventListener('click', function(e){
+            e.preventDefault();
+            let selectedCats = [];
+            const nodeList = document.querySelector(".categories").childNodes;
+            nodeList.forEach(element =>{
+                if(element.className === "selected"){
+                    selectedCats.push(element);
+                }
+            })
+            console.log(selectedCats);
+            if(selectedCats.length > 1){
+                document.querySelector(".showerr").style.display = "block";
+                nodeList.forEach(element =>{
+                if(element.className === "selected"){
+                    element.classList.remove("selected");
+                    element.style.background = "#fefae0";
+                }
+                selectedCats = [];
+            })
+            }else{
+                // call the API 
+            }
+
         })
 
     </script>

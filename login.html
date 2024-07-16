@@ -97,7 +97,7 @@
                     body: JSON.stringify({ data: userDataJson })
                 });
 
-                if (response.status != 400) {
+                if (response.ok) {
                     const result = await response.json();
                     const resultJSON = JSON.stringify(result);
                     console.log("HERE IN RES OK")
