@@ -11,20 +11,22 @@ body{
 }
 
 /* form - add new category */
-#form_add_category{
+#add_category_btn{
+    width: 100%;
+}
+
+/* #form_add_category{
     display: flex;
 }
 #add_category{
     margin-left: auto;
-}
-
+} */
 
 /* categories */
 .categories{
     /* border: 1px solid black; */
     background: #edede9;
     border-radius: 10px;
-
 }
 .categories li{
     list-style: none;
@@ -40,4 +42,9 @@ body{
 }
 .showerr{
     display: none;
+}
+
+/* save category */
+#save_cat{
+    width: 100%;
 }
