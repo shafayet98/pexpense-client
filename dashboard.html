@@ -30,40 +30,35 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-6">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h2>DEMO PURPOSE: Welcome <b class="accountHolder"> </b></h2>
-                            <!-- form to add a net category -->
-                            <form id="form_add_category">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="add_category"
-                                        aria-describedby="addnewCategory" placeholder="Enter a new Category">
-                                </div>
-                                <button id="add_category_btn" type="submit" class="mt-2 btn btn-outline-dark">Add
-                                    Category</button>
-                            </form>
-                            <!-- all the created categories -->
-                            <div class="categories mt-5"></div>
-                            <button id="save_cat" type="submit" class="mt-3 btn btn-outline-dark">Save</button>
-                            <p class="showerr mt-1">Please select single category to proceed</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <form id="form_add_amount">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="add_amount" aria-describedby="addAmount"
-                                        placeholder="Enter the amount">
-                                </div>
-                            </form>
-                        </div>
+            <div class="col-sm-4">
+                <h2>DEMO PURPOSE: Welcome <b class="accountHolder"> </b></h2>
+                <!-- form to add a net category -->
+                <form id="form_add_category">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="add_category" aria-describedby="addnewCategory"
+                            placeholder="Enter a new Category">
                     </div>
-                </div>
+                    <button id="add_category_btn" type="submit" class="mt-2 btn btn-outline-dark">Add
+                        Category</button>
+                </form>
+                <!-- all the created categories -->
+                <div class="categories mt-3"></div>
+                <form id="form_add_amount" class="mt-3">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="add_amount" aria-describedby="addAmount"
+                            placeholder="Enter the amount">
+                    </div>
+                </form>
+                <button id="save_cat" type="submit" class="mt-3 btn btn-outline-dark">Save</button>
+                <p class="showerr mt-1">Please select single category to proceed</p>
 
             </div>
-            <div class="col-sm-6"></div>
+            <div class="col-sm-8">
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
     </div>
+
 
 
 
@@ -72,9 +67,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-
-
+        var allcats = [];
 
         let userid = window.sessionStorage.getItem("userid");
         let accessToken = window.sessionStorage.getItem("accessToken");
@@ -105,15 +101,44 @@
                         listItem.setAttribute("id", element.category_name);
                         listItem.appendChild(catName);
                         document.querySelector(".categories").appendChild(listItem);
+                        allcats.push(element.category_name);
                     });
+
+
+
+                    // chartjs 
+                    // chart JS
+                    const ctx = document.getElementById('myChart');
+                    
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: allcats,
+                            datasets: [{
+                                label: 'Expense on each category',
+                                data: [12, 19, 3, 5, 2, 3], // count the total amount of each category and show data here. 
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+
+
+
+
                     console.log(result);
                 } else {
                     console.log(response);
-                    // alert('Error submitting data: ' + response.statusText);
                 }
             } catch (error) {
                 console.log(response);
-                // alert('Error submitting data: ' + error.message);
             }
         })
 
@@ -159,7 +184,7 @@
                 let categoryChosen = selectedCats[0].innerHTML;
 
                 // expense
-                
+
                 // Call the APIs
                 // 1. call the internal category api
                 let cat_details = await getCatId(categoryChosen);
@@ -172,12 +197,12 @@
                     "amount": amount
                 }
                 // NOW CALL THE EXPENSE API
-                // saveExpense();
+                await saveExpense(expense);
             }
 
         })
 
-        async function getCatId(categoryChosen){
+        async function getCatId(categoryChosen) {
             try {
                 // get category id from api
                 const response = await fetch(`http://localhost:8080/api/users/category/name?name=${categoryChosen}`, {
@@ -199,32 +224,30 @@
             }
         }
 
-        async function saveExpense(){ 
+        async function saveExpense(expense) {
             // implement later
             try {
                 // Send the data to the API
-                const response = await fetch('http://localhost:8080/api/users/categories', {
+                const response = await fetch('http://localhost:8080/api/users/expense', {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${accessToken}`
                     },
-                    body: JSON.stringify({ data: new_category_created })
+                    body: JSON.stringify({ data: expense })
                 });
 
                 if (response.ok) {
                     const result = await response.json();
-                    const resultJSON = JSON.stringify(result);
                     console.log(result);
-                    location.reload();
+                    // save the data in frontend someway and then reload it.
+                    // location.reload();
                 } else {
                     console.log(response);
-                    alert('Error submitting data: ' + response.statusText);
                 }
             } catch (error) {
-                console.log(response);
-                alert('Error submitting data: ' + error.message);
+                console.log(error);
             }
         }
 
@@ -241,7 +264,7 @@
             createNewCategory(new_category_created)
         })
 
-        async function createNewCategory(new_category_created){
+        async function createNewCategory(new_category_created) {
             try {
                 // Send the data to the API
                 const response = await fetch('http://localhost:8080/api/users/categories', {
@@ -268,6 +291,10 @@
                 alert('Error submitting data: ' + error.message);
             }
         }
+
+
+
+
 
     </script>
 </body>
