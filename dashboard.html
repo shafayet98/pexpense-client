@@ -42,7 +42,7 @@
                         Category</button>
                 </form>
                 <!-- all the created categories -->
-                 
+
                 <div class="categories mt-3"></div>
                 <button id="delete_cat" type="submit" class="mt-2 btn btn-outline-dark d-none">Delete Category</button>
 
@@ -118,7 +118,7 @@
             }
         })
 
-        async function sumofcategory(){
+        async function sumofcategory() {
             try {
                 // get category id from api
                 const response = await fetch(`http://localhost:8080/api/users/category/sum`, {
@@ -187,19 +187,41 @@
         });
 
         // delete the cats
-        document.getElementById("delete_cat").addEventListener("click", function(e){
-            // console.log(selected_lst.id);
-            // console.log(all_cats_obj);
+        document.getElementById("delete_cat").addEventListener("click", async function (e) {
 
             // get the id 
             let cat_id_selected = undefined;
-            for (let i = 0 ; i < all_cats_obj.length ; i++){
-                if(selected_lst.id === all_cats_obj[i].category_name){
+            for (let i = 0; i < all_cats_obj.length; i++) {
+                if (selected_lst.id === all_cats_obj[i].category_name) {
                     cat_id_selected = all_cats_obj[i].category_id;
                 }
             }
             console.log(cat_id_selected);
+            // call the api
+            try {
+                // get category id from api
+                const response = await fetch(`http://localhost:8080/api/users/categories/${cat_id_selected}`, {
+                    method: 'DELETE',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    return result;
+
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+
             selected_lst = undefined;
+
 
         })
 
@@ -261,7 +283,8 @@
                 });
                 if (response.ok) {
                     const result = await response.json();
-                    return result;
+                    // location.reload();
+                    // reload not working
                 } else {
                     console.log(response);
                 }
