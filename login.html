@@ -100,10 +100,12 @@
                 if (response.ok) {
                     const result = await response.json();
                     const resultJSON = JSON.stringify(result);
-                    console.log("HERE IN RES OK")
+                    console.log("HERE IN RES OK");
+                    console.log(result);
                     // console.log('Data submitted successfully: ' + JSON.stringify(result));
                     // save the user data to localStorage
                     window.sessionStorage.setItem("userid", result["userid"]);
+                    window.sessionStorage.setItem("username", result["username"]);
                     window.sessionStorage.setItem("accessToken", result["accessToken"]);
                     window.location.href = "http://127.0.0.1:5500/dashboard.html";
                 } else {
