@@ -51,3 +51,9 @@ body{
 #save_cat{
     width: 100%;
 }
+
+/* chart style */
+#myChart2{
+    width: 50% !important;
+    height: 50% !important;
+}

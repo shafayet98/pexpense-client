@@ -59,6 +59,10 @@
             </div>
             <div class="col-sm-8">
                 <canvas id="myChart"></canvas>
+                <div class="d-flex justify-content-center mt-5">
+                    <canvas id="myChart2"></canvas>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -139,7 +143,7 @@
                     });
 
                     // console.log(catstotalexpense);
-                    // chartjs 
+                    // chartjs - bar chart
                     const ctx = document.getElementById('myChart');
                     new Chart(ctx, {
                         type: 'bar',
@@ -159,6 +163,26 @@
                             }
                         }
                     });
+                    // chartjs - pie chart
+                    const ctx2 = document.getElementById('myChart2');
+                    const data = {
+                        labels: allcats,
+                        datasets: [{
+                            label: 'My First Dataset',
+                            data: catstotalexpense,
+                            // backgroundColor: [
+                            //     'rgb(255, 99, 132)',
+                            //     'rgb(54, 162, 235)',
+                            //     'rgb(255, 205, 86)'
+                            // ],
+                            hoverOffset: 4
+                        }]
+                    };
+                    new Chart(ctx2, {
+                        type: 'doughnut',
+                        data: data
+                    });
+
 
                 } else {
                     console.log(response);
@@ -256,8 +280,9 @@
                 // Call the APIs
                 // 1. call the internal category api
                 let cat_details = await getCatId(categoryChosen);
+                // console.log(cat_details);
                 let cat_id = cat_details[0][0].category_id;
-                console.log(cat_id);
+                console.log(cat_details);
                 // 2. call the expense api
                 let expense = {
                     "user_id": userid,
@@ -283,6 +308,7 @@
                 });
                 if (response.ok) {
                     const result = await response.json();
+                    return result;
                     // location.reload();
                     // reload not working
                 } else {
