@@ -58,11 +58,21 @@
 
             </div>
             <div class="col-sm-8">
-                <canvas id="myChart"></canvas>
-                <div class="d-flex justify-content-center mt-5">
-                    <canvas id="myChart2"></canvas>
+                <div class="containsAnalysis_bar justify-content-center d-flex mt-5">
+                    <canvas id="myChart"></canvas>
                 </div>
-                
+               
+                <div class="d-flex justify-content-center">
+                    <button id="show_more_analysis" type="submit" class="mt-2 btn btn-outline-dark">Show more
+                        analysis</button>
+                </div>
+                <div class="containsAnalysis_pie justify-content-center mt-5 d-none">
+                    <canvas id="myChart2"></canvas>
+                    
+                </div>
+                <div class="containsAnalysis_polar justify-content-center mt-5 d-none">
+                    <canvas id="myChart3"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -181,6 +191,20 @@
                     new Chart(ctx2, {
                         type: 'doughnut',
                         data: data
+                    });
+
+                    // chart-js: polar area chart
+                    const ctx3 = document.getElementById('myChart3');
+                    const data_polar = {
+                        labels: allcats,
+                        datasets: [{
+                            label: 'My First Dataset',
+                            data: catstotalexpense
+                        }]
+                    }
+                    new Chart(ctx3, {
+                        type: 'polarArea',
+                        data: data_polar
                     });
 
 
@@ -388,7 +412,17 @@
         }
 
 
+        // show more analysis
+        document.getElementById("show_more_analysis").addEventListener("click", (e) => {
+            e.preventDefault();
+            document.querySelector(".containsAnalysis_pie").classList.remove("d-none");
+            document.querySelector(".containsAnalysis_pie").classList.add("d-flex");
 
+            document.querySelector(".containsAnalysis_polar").classList.remove("d-none");
+            document.querySelector(".containsAnalysis_polar").classList.add("d-flex");
+
+            e.target.classList.add("d-none");
+        })
 
 
     </script>
