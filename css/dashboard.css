@@ -51,6 +51,9 @@ body{
 #save_cat{
     width: 100%;
 }
+#show_spec_cat_analysis{
+    float: right;
+}
 
 /* chart style */
 

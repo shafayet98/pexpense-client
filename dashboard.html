@@ -44,7 +44,11 @@
                 <!-- all the created categories -->
 
                 <div class="categories mt-3"></div>
-                <button id="delete_cat" type="submit" class="mt-2 btn btn-outline-dark d-none">Delete Category</button>
+                <div class="">
+                    <button id="delete_cat" type="submit" class="mt-2 btn btn-outline-dark d-none">Delete Category</button>
+                    <button id="show_spec_cat_analysis" type="submit" class="mt-2 btn btn-outline-dark d-none">Show Analysis</button>
+                </div>
+                
 
 
                 <form id="form_add_amount" class="mt-3">
@@ -230,6 +234,7 @@
                 // save this selected in global var
                 selected_lst = e.target;
                 document.getElementById("delete_cat").classList.remove("d-none");
+                document.getElementById("show_spec_cat_analysis").classList.remove("d-none");
             }
             document.querySelector(".showerr").style.display = "none";
         });
@@ -422,6 +427,21 @@
             document.querySelector(".containsAnalysis_polar").classList.add("d-flex");
 
             e.target.classList.add("d-none");
+        })
+
+        // show category based analysis
+        document.getElementById("show_spec_cat_analysis").addEventListener("click", (e)=>{
+            e.preventDefault();
+            let cat_id_selected = undefined;
+            let cat_selected_name = undefined;
+            for (let i = 0; i < all_cats_obj.length; i++) {
+                if (selected_lst.id === all_cats_obj[i].category_name) {
+                    cat_id_selected = all_cats_obj[i].category_id;
+                    cat_selected_name = all_cats_obj[i].category_name;
+                }
+            }
+            console.log(cat_id_selected);
+            console.log(cat_selected_name);
         })
 
 
