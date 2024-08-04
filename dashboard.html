@@ -22,9 +22,16 @@
 <body>
 
     <!-- As a heading -->
+
+
     <nav class="navbar navbar-light">
         <img class="logo" src="images/logo1.png">
-        <button id="logout" type="submit" class="mt-3 btn btn-outline-dark">Logout</button>
+        <div class="d-flex">
+            <button id="settings" type="submit" class="m-3 btn btn-outline-dark">Settings</button>
+            <button id="logout" type="submit" class="m-3 btn btn-outline-dark">Logout</button>
+        </div>
+        
+
     </nav>
 
 
@@ -45,10 +52,12 @@
 
                 <div class="categories mt-3"></div>
                 <div class="">
-                    <button id="delete_cat" type="submit" class="mt-2 btn btn-outline-dark d-none">Delete Category</button>
-                    <button id="show_spec_cat_analysis" type="submit" class="mt-2 btn btn-outline-dark d-none">Show Analysis</button>
+                    <button id="delete_cat" type="submit" class="mt-2 btn btn-outline-dark d-none">Delete
+                        Category</button>
+                    <button id="show_spec_cat_analysis" type="submit" class="mt-2 btn btn-outline-dark d-none">Show
+                        Analysis</button>
                 </div>
-                
+
 
 
                 <form id="form_add_amount" class="mt-3">
@@ -65,14 +74,14 @@
                 <div class="containsAnalysis_bar justify-content-center d-flex mt-5">
                     <canvas id="myChart"></canvas>
                 </div>
-               
+
                 <div class="d-flex justify-content-center">
                     <button id="show_more_analysis" type="submit" class="mt-2 btn btn-outline-dark">Show more
                         analysis</button>
                 </div>
                 <div class="containsAnalysis_pie justify-content-center mt-5 d-none">
                     <canvas id="myChart2"></canvas>
-                    
+
                 </div>
                 <div class="containsAnalysis_polar justify-content-center mt-5 d-none">
                     <canvas id="myChart3"></canvas>
@@ -97,8 +106,14 @@
         let userid = window.sessionStorage.getItem("userid");
         let accessToken = window.sessionStorage.getItem("accessToken");
         let username = window.sessionStorage.getItem("username");
+        let useremail = window.sessionStorage.getItem("useremail");
 
-        document.querySelector(".accountHolder").innerHTML = username;
+        if (username != null){
+            document.querySelector(".accountHolder").innerHTML = username;
+        }else{
+            document.querySelector(".accountHolder").innerHTML = "User";
+        }
+        
         console.log(userid);
 
         const headers = {
@@ -184,11 +199,6 @@
                         datasets: [{
                             label: 'My First Dataset',
                             data: catstotalexpense,
-                            // backgroundColor: [
-                            //     'rgb(255, 99, 132)',
-                            //     'rgb(54, 162, 235)',
-                            //     'rgb(255, 205, 86)'
-                            // ],
                             hoverOffset: 4
                         }]
                     };
@@ -430,7 +440,7 @@
         })
 
         // show category based analysis
-        document.getElementById("show_spec_cat_analysis").addEventListener("click", (e)=>{
+        document.getElementById("show_spec_cat_analysis").addEventListener("click", (e) => {
             e.preventDefault();
             let cat_id_selected = undefined;
             let cat_selected_name = undefined;
@@ -444,7 +454,9 @@
             console.log(cat_selected_name);
         })
 
-
+        document.getElementById("settings").addEventListener("click", (e)=>{
+            window.location.href = "http://127.0.0.1:5500/settings.html";
+        });
     </script>
 </body>
 
