@@ -135,7 +135,7 @@
                     const result = await response.json();
                     result.forEach(element => {
                         let listItem = document.createElement("li");
-                        let catName = document.createTextNode(element.category_name);
+                        let catName = document.createTextNode(element.category_name.toUpperCase());
                         listItem.setAttribute("id", element.category_name);
                         listItem.appendChild(catName);
                         document.querySelector(".categories").appendChild(listItem);
@@ -271,10 +271,10 @@
                         'Authorization': `Bearer ${accessToken}`
                     }
                 });
+                location.reload();
                 if (response.ok) {
                     const result = await response.json();
                     return result;
-
                 } else {
                     console.log(response);
                 }
