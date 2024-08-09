@@ -120,6 +120,22 @@
             'Authorization': `Bearer ${accessToken}`
         };
 
+        let inp_add_category = document.getElementById("add_category");
+        let inp_add_amount = document.getElementById("add_amount");
+
+        document.getElementById("add_category_btn").disabled = true;
+        document.getElementById("save_cat").disabled = true;
+
+        inp_add_category.addEventListener("keyup", function(){
+            document.getElementById("add_category_btn").disabled = false;
+        });
+
+        inp_add_amount.addEventListener("keyup", function(){
+            document.getElementById("save_cat").disabled = false;
+        })
+
+        
+
         document.addEventListener("DOMContentLoaded", async function () {
             try {
                 // Send the data to the API

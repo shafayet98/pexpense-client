@@ -64,6 +64,11 @@ body{
     border-radius: 10px;
     background: #ffffff;
     box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+    
+}
+
+.containsAnalysis_polar{
+    margin-bottom: 20px;
 }
 #myChart2, #myChart3{
     width: 50% !important;
