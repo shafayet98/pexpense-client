@@ -30,7 +30,7 @@
             <button id="settings" type="submit" class="m-3 btn btn-outline-dark">Settings</button>
             <button id="logout" type="submit" class="m-3 btn btn-outline-dark">Logout</button>
         </div>
-        
+
 
     </nav>
 
@@ -71,8 +71,10 @@
 
             </div>
             <div class="col-sm-8">
+                
                 <div class="containsAnalysis_bar justify-content-center d-flex mt-5">
                     <canvas id="myChart"></canvas>
+                   
                 </div>
 
                 <div class="d-flex justify-content-center">
@@ -85,6 +87,11 @@
                 </div>
                 <div class="containsAnalysis_polar justify-content-center mt-5 d-none">
                     <canvas id="myChart3"></canvas>
+                </div>
+                <div class="">
+                    <div class="">
+                        <canvas id="myChart4" class="singleCatAnalysis d-none"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,12 +115,12 @@
         let username = window.sessionStorage.getItem("username");
         let useremail = window.sessionStorage.getItem("useremail");
 
-        if (username != null){
+        if (username != null) {
             document.querySelector(".accountHolder").innerHTML = username;
-        }else{
+        } else {
             document.querySelector(".accountHolder").innerHTML = "User";
         }
-        
+
         console.log(userid);
 
         const headers = {
@@ -126,15 +133,15 @@
         document.getElementById("add_category_btn").disabled = true;
         document.getElementById("save_cat").disabled = true;
 
-        inp_add_category.addEventListener("keyup", function(){
+        inp_add_category.addEventListener("keyup", function () {
             document.getElementById("add_category_btn").disabled = false;
         });
 
-        inp_add_amount.addEventListener("keyup", function(){
+        inp_add_amount.addEventListener("keyup", function () {
             document.getElementById("save_cat").disabled = false;
         })
 
-        
+
 
         document.addEventListener("DOMContentLoaded", async function () {
             try {
@@ -264,6 +271,11 @@
             }
             document.querySelector(".showerr").style.display = "none";
         });
+
+
+
+
+
 
         // delete the cats
         document.getElementById("delete_cat").addEventListener("click", async function (e) {
@@ -456,7 +468,7 @@
         })
 
         // show category based analysis
-        document.getElementById("show_spec_cat_analysis").addEventListener("click", (e) => {
+        document.getElementById("show_spec_cat_analysis").addEventListener("click", async (e) => {
             e.preventDefault();
             let cat_id_selected = undefined;
             let cat_selected_name = undefined;
@@ -466,11 +478,63 @@
                     cat_selected_name = all_cats_obj[i].category_name;
                 }
             }
+
+            let responseBack = undefined;
+            let single_category_expense = [];
+            let dates_expense_made = [];
+
+            document.getElementById("myChart").classList.add("d-none");
+            document.querySelector(".containsAnalysis_bar").classList.add("d-none");
+            document.getElementById("show_more_analysis").classList.add("d-none");
+            document.getElementById("myChart4").classList.remove("d-none");
+
+            try {
+                // 
+                const response = await fetch(`http://localhost:8080/api/users/analyse/category?catid=${cat_id_selected}`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    result.forEach((element) => {
+                        single_category_expense.push(element["amount"]);
+                        dates_expense_made.push(element["expense_date"]);
+                    })
+                    // chartjs - pie chart
+                    const ctx4 = document.getElementById('myChart4');
+                    const data = {
+                        labels: dates_expense_made,
+                        datasets: [{
+                            label: 'Expense on Single Category',
+                            data: single_category_expense,
+                            hoverOffset: 4
+                        }]
+                    };
+                    new Chart(ctx4, {
+                        type: 'line',
+                        data: data
+                    });
+                    
+
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
             console.log(cat_id_selected);
             console.log(cat_selected_name);
+
+
+            // call the api
         })
 
-        document.getElementById("settings").addEventListener("click", (e)=>{
+        document.getElementById("settings").addEventListener("click", (e) => {
             window.location.href = "http://127.0.0.1:5500/settings.html";
         });
     </script>
