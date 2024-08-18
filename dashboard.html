@@ -84,7 +84,7 @@
                 <!-- <div class="containsAnalysis_pie justify-content-center mt-5 d-none">
                     <canvas id="myChart2"></canvas>
                 </div> -->
-                
+
                 <div class="">
                     <div class="">
                         <button id="back" type="submit" class="back_dashboard mt-3 btn btn-outline-dark d-none">Back to
@@ -98,6 +98,22 @@
             </div>
         </div>
     </div>
+
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div id="ai_summary" class="gpt_summary col-sm-5 d-none">
+                <h3>AI Summary</h3>
+                <div class="contains_ai_summary"></div>
+            </div>
+            <div style="margin-left: auto;" id="ai_suggestion" class="gpt_suggestion col-sm-6 d-none">
+                <button id="ai_suggestion_btn" type="submit" class="mt-2 btn btn-outline-dark">Click for AI
+                    Suggestion</button>
+                <div class="contains_ai_suggestion">
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="container mt-5 mb-5">
         <div class="row">
@@ -474,10 +490,8 @@
 
 
         // show more analysis
-        document.getElementById("show_more_analysis").addEventListener("click", (e) => {
+        document.getElementById("show_more_analysis").addEventListener("click", async (e) => {
             e.preventDefault();
-
-
 
             document.querySelector(".containsAnalysis_pie").classList.remove("d-none");
             document.querySelector(".containsAnalysis_pie").classList.add("d-flex");
@@ -486,6 +500,86 @@
             document.querySelector(".containsAnalysis_polar").classList.add("d-flex");
 
             e.target.classList.add("d-none");
+            // console.log(catstotalexpense);
+            // console.log(allcats);
+
+            // dictionary that contains category based total expense
+            let expense_dictionary = {};
+            for (let i = 0; i < allcats.length; i++) {
+                expense_dictionary[allcats[i]] = catstotalexpense[i];
+            }
+            // console.log(expense_dictionary);
+
+            // connect to gpt
+            try {
+                // Send the data to the API
+                const response = await fetch('http://localhost:8080/api/users/ai/summary', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({ data: expense_dictionary })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const resultJSON = JSON.stringify(result);
+                    document.querySelector(".contains_ai_summary").innerHTML = result["summary"];
+                    document.querySelector(".gpt_summary").classList.remove("d-none");
+                    document.querySelector(".gpt_suggestion").classList.remove("d-none");
+                    // console.log(result);
+                } else {
+                    console.log(response);
+                    alert('Error submitting data: ' + response.statusText);
+                }
+            } catch (error) {
+                console.log(response);
+                alert('Error submitting data: ' + error.message);
+            }
+        });
+
+
+        // ************ GET AI SUGGESTION *********************
+        document.getElementById("ai_suggestion_btn").addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            // dictionary that contains category based total expense
+            let expense_dictionary = {};
+            for (let i = 0; i < allcats.length; i++) {
+                expense_dictionary[allcats[i]] = catstotalexpense[i];
+            }
+            // console.log(expense_dictionary);
+
+            // connect to gpt
+            try {
+                // Send the data to the API
+                const response = await fetch('http://localhost:8080/api/users/ai/suggestion', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({ data: expense_dictionary })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const resultJSON = JSON.stringify(result);
+                    // document.querySelector(".contains_ai_suggestion").innerHTML = result["summary"];
+                    e.target.classList.add("d-none");
+                    console.log(result);
+                } else {
+                    console.log(response);
+                    alert('Error submitting data: ' + response.statusText);
+                }
+            } catch (error) {
+                console.log(response);
+                alert('Error submitting data: ' + error.message);
+            }
+
         })
 
         // show category based analysis
