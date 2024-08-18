@@ -84,9 +84,40 @@ body{
     margin-left: auto;
 }
 
-#ai_summary, #ai_suggestion{
+#ai_summary{
+    height: fit-content !important;
     padding: 10px;
     border-radius: 10px;
     background: #ffffff;
     box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+}
+
+#ai_suggestion{
+    padding: 10px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+}
+#ai_suggestion_btn{
+    text-decoration: underline;
+}
+
+#ai_suggestion_btn:hover{
+    color:rgb(255,49,48);
+}
+
+#each_ai_card{
+    padding: 10px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+    margin-bottom: 10px;
+}
+
+#each_ai_card p{
+    margin: 0px !important;
+}
+
+#each_ai_card .escat{
+    color: rgb(255,49,48);
 }

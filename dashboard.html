@@ -90,7 +90,6 @@
                         <button id="back" type="submit" class="back_dashboard mt-3 btn btn-outline-dark d-none">Back to
                             Dashboard</button>
                     </div>
-
                     <div class="mt-3">
                         <canvas id="myChart4" class="singleCatAnalysis d-none"></canvas>
                     </div>
@@ -106,8 +105,8 @@
                 <div class="contains_ai_summary"></div>
             </div>
             <div style="margin-left: auto;" id="ai_suggestion" class="gpt_suggestion col-sm-6 d-none">
-                <button id="ai_suggestion_btn" type="submit" class="mt-2 btn btn-outline-dark">Click for AI
-                    Suggestion</button>
+                <h5 id="ai_suggestion_btn" type="submit" class="mt-2">Click for AI
+                    Suggestion</h5>
                 <div class="contains_ai_suggestion">
                 </div>
             </div>
@@ -570,13 +569,59 @@
                     const resultJSON = JSON.stringify(result);
                     // document.querySelector(".contains_ai_suggestion").innerHTML = result["summary"];
                     e.target.classList.add("d-none");
+
+                    // result.forEach(element => {
+                    //     let listItem = document.createElement("li");
+                    //     let catName = document.createTextNode(element.category_name.toUpperCase());
+                    //     listItem.setAttribute("id", element.category_name);
+                    //     listItem.appendChild(catName);
+                    //     document.querySelector(".categories").appendChild(listItem);
+                    //     all_cats_obj.push(element);
+                    // });
+
+                    let heading = document.createElement("h3");
+                    let heading_text = document.createTextNode("AI generated suggestions");
+                    heading.appendChild(heading_text);
+                    document.querySelector(".contains_ai_suggestion").appendChild(heading);
+
+                    result.forEach((element)=>{
+                        let crd_div = document.createElement("div");
+                        crd_div.setAttribute("id","each_ai_card");
+
+                        let cat_headingP = document.createElement("p");
+                        cat_headingP.setAttribute("class","catname");
+                        let category_name = document.createTextNode(`Category: ${element["category"]}`);
+                        cat_headingP.appendChild(category_name);
+
+                        let cat_p = document.createElement("p");
+                        cat_p.setAttribute("class","catsugs");
+                        let category_suggs = document.createTextNode(`Suggestion: ${element["Suggestion"]}`);
+                        cat_p.appendChild(category_suggs);
+
+                        let cat_es_p = document.createElement("p");
+                        cat_es_p.setAttribute("class","escat");
+                        let category_estimated_saving = document.createTextNode(`Estimated Savings: ${element["estimated_savings"]}`);
+                        cat_es_p.appendChild(category_estimated_saving);
+
+                        crd_div.appendChild(cat_headingP);
+                        crd_div.appendChild(cat_p);
+                        crd_div.appendChild(cat_es_p);
+                        document.querySelector(".contains_ai_suggestion").appendChild(crd_div);
+                    });
+
+                    console.log(document.getElementById("ai_suggestion").offsetHeight);
+                    if (document.getElementById("ai_suggestion").offsetHeight > 300){
+                        console.log("Here");
+                        document.getElementById("ai_suggestion").style.height = "300px"; 
+                        document.getElementById("ai_suggestion").style.overflowY = "auto"; 
+                    }
                     console.log(result);
+
                 } else {
                     console.log(response);
                     alert('Error submitting data: ' + response.statusText);
                 }
             } catch (error) {
-                console.log(response);
                 alert('Error submitting data: ' + error.message);
             }
 
@@ -671,6 +716,9 @@
         document.getElementById("reset").addEventListener("click", (e) => {
             location.reload();
         });
+
+        
+        
     </script>
 </body>
 
