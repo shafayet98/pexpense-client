@@ -93,6 +93,7 @@
                     <div class="mt-3">
                         <canvas id="myChart4" class="singleCatAnalysis d-none"></canvas>
                     </div>
+                    <button id="show_category_based_ai_sum_sug" type="submit" class="cat_based_gpt_sum_sug mt-3 btn btn-outline-dark d-none">Generate AI Summary and Suggestion</button>
                 </div>
             </div>
         </div>
@@ -637,6 +638,11 @@
             document.querySelector(".containsAnalysis_pie").classList.add("d-none");
             document.querySelector(".containsAnalysis_polar").classList.add("d-none");
 
+            // edir HERE
+            document.querySelector(".gpt_summary").classList.add("d-none");
+            document.querySelector(".gpt_suggestion").classList.add("d-none");
+
+            document.querySelector(".cat_based_gpt_sum_sug").classList.remove("d-none");
 
             let cat_id_selected = undefined;
             let cat_selected_name = undefined;
@@ -717,7 +723,10 @@
             location.reload();
         });
 
-        
+        document.getElementById("show_category_based_ai_sum_sug").addEventListener("click", (e)=>{
+            e.preventDefault();
+            console.log("hello");
+        })
         
     </script>
 </body>
