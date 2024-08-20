@@ -94,6 +94,11 @@
                         <canvas id="myChart4" class="singleCatAnalysis d-none"></canvas>
                     </div>
                     <button id="show_category_based_ai_sum_sug" type="submit" class="cat_based_gpt_sum_sug mt-3 btn btn-outline-dark d-none">Generate AI Summary and Suggestion</button>
+                    <div class="mt-5 spec_suggs_heading d-none">
+                        <h6>AI Summary & Suggestion</h6>
+                        <div class="contains_ai_suggestion_specific_cat"></div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -147,6 +152,10 @@
         let accessToken = window.sessionStorage.getItem("accessToken");
         let username = window.sessionStorage.getItem("username");
         let useremail = window.sessionStorage.getItem("useremail");
+
+        let single_category_expense = [];
+        let dates_expense_made = [];
+        let selected_cat_more_analysis = undefined;
 
         if (username != null) {
             document.querySelector(".accountHolder").innerHTML = username;
@@ -654,14 +663,13 @@
             }
 
             let responseBack = undefined;
-            let single_category_expense = [];
-            let dates_expense_made = [];
+            
 
             document.getElementById("myChart").classList.add("d-none");
             document.querySelector(".containsAnalysis_bar").classList.add("d-none");
             document.getElementById("show_more_analysis").classList.add("d-none");
             document.getElementById("myChart4").classList.remove("d-none");
-
+            selected_cat_more_analysis = cat_selected_name;
             try {
                 // 
                 const response = await fetch(`http://localhost:8080/api/users/analyse/category?catid=${cat_id_selected}`, {
@@ -723,9 +731,49 @@
             location.reload();
         });
 
-        document.getElementById("show_category_based_ai_sum_sug").addEventListener("click", (e)=>{
+        document.getElementById("show_category_based_ai_sum_sug").addEventListener("click", async (e)=>{
             e.preventDefault();
-            console.log("hello");
+
+            week_data = {
+                "category": selected_cat_more_analysis,
+                "expense": single_category_expense,
+                "dates": dates_expense_made
+            }
+            console.log(week_data);
+
+            // connect to gpt
+            try {
+                // Send the data to the API
+                const response = await fetch('http://localhost:8080/api/users/category/ai/suggestion', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({ data: week_data })
+                });
+
+                if (response.ok) {
+                    document.querySelector(".spec_suggs_heading").classList.remove("d-none")
+                    const result = await response.json();
+                    console.log(result);
+                    // const resultJSON = JSON.stringify(result);
+                    document.querySelector(".contains_ai_suggestion_specific_cat").innerHTML = result;
+                    // document.querySelector(".contains_ai_suggestion_specific_cat").classList.remove("d-none");
+                    document.querySelector(".cat_based_gpt_sum_sug").classList.add("d-none");
+                    
+                } else {
+                    console.log(response);
+                    alert('Error submitting data: ' + response.statusText);
+                }
+            } catch (error) {
+                alert('Error submitting data: ' + error.message);
+            }
+
+
+
+
         })
         
     </script>

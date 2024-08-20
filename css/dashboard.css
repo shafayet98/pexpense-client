@@ -114,6 +114,14 @@ body{
     margin-bottom: 10px;
 }
 
+.contains_ai_suggestion_specific_cat{
+    padding: 10px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
+    margin-bottom: 10px;
+}
+
 #each_ai_card p{
     margin: 0px !important;
 }
