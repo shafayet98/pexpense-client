@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <link rel="stylesheet" href="css/login.css">
 
@@ -33,10 +34,12 @@
                             insights, visualization and take informed decision.
                         </p>
                     </div>
+                    <p class="errorHandleText"></p>
                     <form id="loginForm">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
+                            <input type="email" class="form-control" id="email" name="email"
+                                aria-describedby="emailHelp" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
@@ -66,13 +69,15 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                
+
             </div>
         </div>
     </div>
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function (event) {
@@ -82,8 +87,8 @@
             const userPass = document.getElementById('password').value;
 
             const userDataJson = {
-                "email" : userEmail,
-                "password" : userPass
+                "email": userEmail,
+                "password": userPass
             }
 
             try {
@@ -97,25 +102,27 @@
                     body: JSON.stringify({ data: userDataJson })
                 });
 
-                if (response.ok) {
+                if (response.status == 200) {
                     const result = await response.json();
                     const resultJSON = JSON.stringify(result);
-                    console.log("HERE IN RES OK");
-                    console.log(result);
+
                     // console.log('Data submitted successfully: ' + JSON.stringify(result));
                     // save the user data to localStorage
                     window.sessionStorage.setItem("userid", result["userid"]);
                     window.sessionStorage.setItem("username", result["username"]);
                     window.sessionStorage.setItem("accessToken", result["accessToken"]);
                     window.sessionStorage.setItem("useremail", result["useremail"]);
+
+
                     window.location.href = "http://127.0.0.1:5500/dashboard.html";
                 } else {
-                    console.log(response);
-                    alert('Error submitting data: ' + response.statusText);
+                    const error = await response.json();
+                    document.querySelector(".errorHandleText").innerHTML = error.message;
+                    console.log('Error:', error.message);
+
                 }
             } catch (error) {
-                console.log(response);
-                alert('Error submitting data: ' + error.message);
+                console.log('Error:', error.message);
             }
         });
 
