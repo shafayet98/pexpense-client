@@ -1,6 +1,9 @@
 ## ExpenseWise is an application that helps users to track everyday expenses. It generates visual graphs and charts based on the expenses and provides suggestions on how to reduce expenses leveraging the power of artificial intelligence.
 
 
+[Application link: ExpenseWise](http://expensewise.shafthinks.xyz/)
+
+
 #### ExpenseWise: Core Functionality
 
 *Register User:* ExpenseWise allows users to create an account so that the tracking of daily expenses and data analysis can be done in user specific manner.
